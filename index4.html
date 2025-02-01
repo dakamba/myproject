@@ -19,8 +19,8 @@
         }
 
         h3 {
-            font-size: 30px;
-            margin-top: 50px;
+            font-size: 24px;
+            margin-top: 30px;
             color: #1E90FF;
         }
 
@@ -48,21 +48,21 @@
         }
 
         #timer {
-            font-size: 24px;
-            margin-bottom: 20px;
+            font-size: 20px;
+            margin-bottom: 15px;
             color: #32CD32;
         }
 
         #start-btn {
-            padding: 12px 30px;
-            font-size: 18px;
+            padding: 12px 25px;
+            font-size: 16px;
             background-color: #32CD32;
             color: white;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             transition: background-color 0.3s;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         #start-btn:hover {
@@ -72,12 +72,14 @@
         .menu {
             margin: 10px;
             display: flex;
-            gap: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
         }
 
         .menu button {
-            padding: 12px 20px;
-            font-size: 16px;
+            padding: 10px 18px;
+            font-size: 14px;
             border: none;
             background-color: #1E90FF;
             color: white;
@@ -94,7 +96,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-top: 50px; /* Отступ сверху */
+            margin-top: 20px;
             width: 100%;
         }
 
@@ -102,16 +104,17 @@
             display: grid;
             gap: 5px;
             position: relative;
+            justify-items: center;
         }
 
         .cell {
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 24px;
+            font-size: 20px;
             font-weight: bold;
-            width: 80px;
-            height: 80px;
+            width: 60px;
+            height: 60px;
             border-radius: 10px;
             cursor: pointer;
             user-select: none;
@@ -131,13 +134,45 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%); /* Центрируем точку */
+            transform: translate(-50%, -50%);
         }
 
         #result {
-            font-size: 24px;
-            margin-top: 20px;
+            font-size: 18px;
+            margin-top: 15px;
             color: #333;
+            text-align: center;
+        }
+
+        /* Адаптивность для мобильных устройств */
+        @media (max-width: 600px) {
+            h3 {
+                font-size: 20px;
+            }
+
+            #timer {
+                font-size: 18px;
+            }
+
+            .menu button {
+                padding: 8px 15px;
+                font-size: 12px;
+            }
+
+            .cell {
+                width: 50px;
+                height: 50px;
+                font-size: 18px;
+            }
+
+            #start-btn {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+
+            #result {
+                font-size: 16px;
+            }
         }
     </style>
 </head>
@@ -156,7 +191,6 @@
         <button onclick="generateGrid(8)">8x8</button>
     </div>
 
-    <!-- Обновленный div для таблицы -->
     <div class="grid-container">
         <div class="grid" id="grid"></div>
     </div>
@@ -165,21 +199,19 @@
 
     <script>
         const colors = ["#87CEEB", "#FFD700", "#8A2BE2", "#1E90FF"];
-        let currentNumber = 1;  // Начинаем с 1
+        let currentNumber = 1;
         let timerInterval;
         let elapsedTime = 0;
         let totalCells;
 
-        // Функция запуска игры
         function startGame() {
-            document.getElementById("start-btn").style.display = "none"; // Скрываем кнопку Начать
-            document.getElementById("menu").style.display = "none"; // Скрываем меню
-            document.getElementById("result").textContent = ""; // Скрываем результат
-            generateGrid(4); // Генерируем таблицу 4x4 (можно выбрать любой размер)
-            startTimer(); // Запускаем таймер
+            document.getElementById("start-btn").style.display = "none";
+            document.getElementById("menu").style.display = "none";
+            document.getElementById("result").textContent = "";
+            generateGrid(4); 
+            startTimer();
         }
 
-        // Функция для старта таймера
         function startTimer() {
             timerInterval = setInterval(() => {
                 elapsedTime++;
@@ -189,20 +221,18 @@
             }, 1000);
         }
 
-        // Функция для завершения игры
         function endGame() {
-            clearInterval(timerInterval); // Останавливаем таймер
+            clearInterval(timerInterval);
             const minutes = String(Math.floor(elapsedTime / 60)).padStart(2, '0');
             const seconds = String(elapsedTime % 60).padStart(2, '0');
             document.getElementById("result").textContent = `Игра завершена! Время: ${minutes}:${seconds}`;
         }
 
-        // Генерация сетки
         function generateGrid(size) {
             const grid = document.getElementById("grid");
             grid.innerHTML = "";
-            grid.style.gridTemplateColumns = `repeat(${size}, 80px)`;
-            grid.style.gridTemplateRows = `repeat(${size}, 80px)`;
+            grid.style.gridTemplateColumns = `repeat(${size}, 60px)`;
+            grid.style.gridTemplateRows = `repeat(${size}, 60px)`;
 
             const numbers = Array.from({ length: size * size }, (_, i) => i + 1).sort(() => Math.random() - 0.5);
             const cells = [];
@@ -214,20 +244,19 @@
                 cell.textContent = number;
                 cell.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
                 cell.addEventListener("click", () => {
-                    // Проверка на правильность последовательности
                     if (parseInt(cell.textContent) === currentNumber) {
                         cell.style.visibility = "hidden";
-                        currentNumber++;  // Переход к следующему числу
+                        currentNumber++;
                         if (currentNumber > totalCells) {
-                            endGame(); // Завершаем игру, если все клетки нажаты
+                            endGame();
                         }
                     }
                 });
                 grid.appendChild(cell);
                 cells.push(cell);
             });
-            // Расставляем точку в центре
-            const centerIndex = Math.floor(size * size / 2); // Находим центральную ячейку
+
+            const centerIndex = Math.floor(size * size / 2);
             const centerCell = cells[centerIndex];
             const dot = document.createElement("div");
             dot.classList.add("center-dot");
