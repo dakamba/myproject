@@ -53,22 +53,6 @@
             color: #32CD32;
         }
 
-        #start-btn {
-            padding: 12px 25px;
-            font-size: 16px;
-            background-color: #32CD32;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            margin-bottom: 15px;
-        }
-
-        #start-btn:hover {
-            background-color: #228B22;
-        }
-
         .menu {
             margin: 10px;
             display: flex;
@@ -144,6 +128,22 @@
             text-align: center;
         }
 
+        #start-btn {
+            margin-top: 20px;
+            padding: 12px 30px;
+            font-size: 18px;
+            background-color: #32CD32;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #start-btn:hover {
+            background-color: #228B22;
+        }
+
         /* Адаптивность для мобильных устройств */
         @media (max-width: 600px) {
             h3 {
@@ -165,11 +165,6 @@
                 font-size: 18px;
             }
 
-            #start-btn {
-                padding: 10px 20px;
-                font-size: 14px;
-            }
-
             #result {
                 font-size: 16px;
             }
@@ -182,13 +177,12 @@
 
     <h3>Таблица Шульте</h3>
     <div id="timer">00:00</div>
-    <button id="start-btn" onclick="startGame()">Начать</button>
     <div class="menu" id="menu">
-        <button onclick="generateGrid(4)">4x4</button>
-        <button onclick="generateGrid(5)">5x5</button>
-        <button onclick="generateGrid(6)">6x6</button>
-        <button onclick="generateGrid(7)">7x7</button>
-        <button onclick="generateGrid(8)">8x8</button>
+        <button onclick="selectGridSize(4)">4x4</button>
+        <button onclick="selectGridSize(5)">5x5</button>
+        <button onclick="selectGridSize(6)">6x6</button>
+        <button onclick="selectGridSize(7)">7x7</button>
+        <button onclick="selectGridSize(8)">8x8</button>
     </div>
 
     <div class="grid-container">
@@ -197,21 +191,31 @@
 
     <div id="result"></div>
 
+    <button id="start-btn" onclick="startGame()" style="display:none;">Начать</button>
+
     <script>
         const colors = ["#87CEEB", "#FFD700", "#8A2BE2", "#1E90FF"];
         let currentNumber = 1;
         let timerInterval;
         let elapsedTime = 0;
         let totalCells;
+        let selectedGridSize;
 
-        function startGame() {
-            document.getElementById("start-btn").style.display = "none";
-            document.getElementById("menu").style.display = "none";
-            document.getElementById("result").textContent = "";
-            generateGrid(4); 
-            startTimer();
+        // Выбор размера таблицы
+        function selectGridSize(size) {
+            selectedGridSize = size; // Запоминаем выбранный размер
+            document.getElementById("start-btn").style.display = "inline-block"; // Показываем кнопку "Начать"
+            generateGrid(size); // Генерируем таблицу
         }
 
+        // Функция запуска игры
+        function startGame() {
+            document.getElementById("start-btn").style.display = "none"; // Скрываем кнопку "Начать"
+            document.getElementById("result").textContent = ""; // Скрытие результата
+            startTimer(); // Запуск таймера
+        }
+
+        // Функция для старта таймера
         function startTimer() {
             timerInterval = setInterval(() => {
                 elapsedTime++;
@@ -221,14 +225,21 @@
             }, 1000);
         }
 
+        // Функция для завершения игры
         function endGame() {
-            clearInterval(timerInterval);
+            clearInterval(timerInterval); // Останавливаем таймер
             const minutes = String(Math.floor(elapsedTime / 60)).padStart(2, '0');
             const seconds = String(elapsedTime % 60).padStart(2, '0');
             document.getElementById("result").textContent = `Игра завершена! Время: ${minutes}:${seconds}`;
         }
 
+        // Генерация сетки
         function generateGrid(size) {
+            currentNumber = 1; // Сброс счётчика на 1
+            elapsedTime = 0; // Сброс времени
+            clearInterval(timerInterval); // Сброс таймера
+            document.getElementById("timer").textContent = "00:00"; // Обновление таймера
+
             const grid = document.getElementById("grid");
             grid.innerHTML = "";
             grid.style.gridTemplateColumns = `repeat(${size}, 60px)`;
@@ -244,6 +255,7 @@
                 cell.textContent = number;
                 cell.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
                 cell.addEventListener("click", () => {
+                    // Проверка на правильность последовательности
                     if (parseInt(cell.textContent) === currentNumber) {
                         cell.style.visibility = "hidden";
                         currentNumber++;
@@ -256,7 +268,8 @@
                 cells.push(cell);
             });
 
-            const centerIndex = Math.floor(size * size / 2);
+            // Расставляем точку в центре
+            const centerIndex = Math.floor(size * size / 2); // Находим центральную ячейку
             const centerCell = cells[centerIndex];
             const dot = document.createElement("div");
             dot.classList.add("center-dot");
