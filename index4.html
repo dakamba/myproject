@@ -16,6 +16,7 @@
             font-family: 'Arial', sans-serif;
             margin: 0;
             color: #333;
+            padding: 10px;
         }
 
         h3 {
@@ -29,14 +30,14 @@
             position: absolute;
             top: 10px;
             right: 10px;
-            width: 30px;
-            height: 30px;
+            width: 35px;
+            height: 35px;
             background-color: #ffffff;
             color: #1E90FF;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: bold;
             text-align: center;
-            line-height: 30px;
+            line-height: 35px;
             border: none;
             border-radius: 50%;
             cursor: pointer;
@@ -48,7 +49,7 @@
         }
 
         #timer {
-            font-size: 22px;
+            font-size: 24px;
             margin-bottom: 15px;
             color: #32CD32;
         }
@@ -70,6 +71,7 @@
             border-radius: 8px;
             cursor: pointer;
             transition: background-color 0.3s;
+            min-width: 80px;
         }
 
         .menu button:hover {
@@ -81,10 +83,10 @@
             justify-content: center;
             align-items: center;
             margin-top: 20px;
-            width: 80vw;
-            height: 80vw;
-            max-width: 400px;
-            max-height: 400px;
+            width: 100%;
+            height: 100%;
+            max-width: 350px;
+            max-height: 350px;
             position: relative;
         }
 
@@ -117,8 +119,8 @@
         }
 
         .center-dot {
-            width: 10px;
-            height: 10px;
+            width: 12px;
+            height: 12px;
             background-color: red;
             border-radius: 50%;
             position: absolute;
@@ -165,13 +167,33 @@
             }
 
             .cell {
+                font-size: 18px;
                 width: 20vw;
                 height: 20vw;
-                font-size: 16px;
             }
 
             #result {
                 font-size: 16px;
+            }
+
+            .grid-container {
+                max-width: 100%;
+                max-height: 300px;
+            }
+
+            .menu {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .grid-container {
+                max-width: 100%;
+                max-height: 250px;
+            }
+
+            .menu button {
+                min-width: 70px;
             }
         }
     </style>
