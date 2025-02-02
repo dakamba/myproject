@@ -4,287 +4,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Таблица Шульте</title>
+    <title>Упражнения</title>
     <style>
         body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            height: 100vh;
-            background-color: #f4f4f9;
-            font-family: 'Arial', sans-serif;
-            position: relative;
-            color: #333;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
             margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
 
-        h3 {
-            font-size: 24px;
-            margin-top: 30px;
-            color: #1E90FF;
-        }
-
-        /* Кнопка-крестик */
-        .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 30px;
-            height: 30px;
-            background-color: #ffffff;
-            color: #1E90FF;
-            font-size: 20px;
-            font-weight: bold;
+        .container {
+            max-width: 400px;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             text-align: center;
-            line-height: 30px;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: background-color 0.3s;
         }
 
-        .close-btn:hover {
-            background-color: #ddd;
-        }
-
-        #timer {
-            font-size: 20px;
-            margin-bottom: 15px;
-            color: #32CD32;
-        }
-
-        .menu {
-            margin: 10px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-        }
-
-        .menu button {
-            padding: 10px 18px;
-            font-size: 14px;
-            border: none;
-            background-color: #1E90FF;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .menu button:hover {
-            background-color: #187bcd;
-        }
-
-        .grid-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 20px;
-            width: 80vw; /* Уменьшаем ширину таблицы для мобильных */
-            height: 80vw; /* Ширина и высота пропорциональны */
-            max-width: 400px; /* Максимальная ширина для больших экранов */
-            max-height: 400px; /* Максимальная высота для больших экранов */
-        }
-
-        .grid {
-            display: grid;
-            gap: 5px;
-            position: relative;
-            justify-items: center;
-            width: 100%;
-            height: 100%;
-        }
-
-        .cell {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 20px;
-            font-weight: bold;
-            border-radius: 10px;
-            cursor: pointer;
-            user-select: none;
-            background-color: #87CEEB;
-            transition: transform 0.2s;
-            width: 100%;
-            height: 100%;
-        }
-
-        .cell:hover {
-            transform: scale(1.1);
-        }
-
-        .center-dot {
-            width: 10px;
-            height: 10px;
-            background-color: red;
-            border-radius: 50%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        #result {
-            font-size: 18px;
-            margin-top: 15px;
+        h2 {
             color: #333;
+        }
+
+        .exercise {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            background: #f3f3f3;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .exercise:hover {
+            background: #ddd;
+            transform: scale(1.05);
+        }
+
+        .exercise-icon {
+            width: 40px;
+            height: 40px;
+            background: #667eea;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        .exercise a {
+            text-decoration: none;
+            color: #333;
+            flex-grow: 1;
+            text-align: left;
+            padding-left: 10px;
+            font-size: 16px;
+        }
+
+        #passwordPrompt {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        #passwordBox {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
             text-align: center;
         }
 
-        #start-btn {
-            margin-top: 20px;
-            padding: 12px 30px;
-            font-size: 18px;
-            background-color: #32CD32;
+        #passwordInput {
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            width: 200px;
+        }
+
+        #submitBtn {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #667eea;
             color: white;
             border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        #start-btn:hover {
-            background-color: #228B22;
-        }
-
-        /* Адаптивность для мобильных устройств */
-        @media (max-width: 600px) {
-            h3 {
-                font-size: 20px;
-            }
-
-            #timer {
-                font-size: 18px;
-            }
-
-            .menu button {
-                padding: 8px 15px;
-                font-size: 12px;
-            }
-
-            .cell {
-                width: 20vw;
-                height: 20vw;
-                font-size: 16px;
-            }
-
-            #result {
-                font-size: 16px;
-            }
+            border-radius: 5px;
         }
     </style>
 </head>
 
 <body>
-    <button class="close-btn" onclick="history.back()">X</button>
-
-    <h3>Таблица Шульте</h3>
-    <div id="timer">00:00</div>
-    <div class="menu" id="menu">
-        <button onclick="selectGridSize(4)">4x4</button>
-        <button onclick="selectGridSize(5)">5x5</button>
-        <button onclick="selectGridSize(6)">6x6</button>
-        <button onclick="selectGridSize(7)">7x7</button>
-        <button onclick="selectGridSize(8)">8x8</button>
+    <div id="passwordPrompt">
+        <div id="passwordBox">
+            <h2>Введите пароль</h2>
+            <input type="password" id="passwordInput" placeholder="Пароль" onkeypress="handleKeyPress(event)">
+            <button id="submitBtn" onclick="checkPassword()">Войти</button>
+        </div>
     </div>
 
-    <div class="grid-container">
-        <div class="grid" id="grid"></div>
+    <div class="container">
+        <h2>Упражнения</h2>
+        <div class="exercise" onclick="location.href='index1.html'">
+            <div class="exercise-icon">🔍</div>
+            <a href="index1.html">Совпадения</a>
+        </div>
+        <div class="exercise">
+            <div class="exercise-icon">🧠</div>
+            <a href="index2.html">Матрица Памяти</a>
+        </div>
+        <div class="exercise">
+            <div class="exercise-icon">🎨</div>
+            <a href="index3.html">Совпадение цветов</a>
+        </div>
+        <div class="exercise">
+            <div class="exercise-icon">📊</div>
+            <a href="index4.html">Таблица Шульте</a>
+        </div>
+        <div class="exercise">
+            <div class="exercise-icon">💡</div>
+            <a href="index5.html">Мнемотехника</a>
+        </div>
+        <div class="exercise">
+            <div class="exercise-icon">➕</div>
+            <a href="index6.html">Арифметика</a>
+        </div>
     </div>
-
-    <div id="result"></div>
-
-    <button id="start-btn" onclick="startGame()" style="display:none;">Начать</button>
 
     <script>
-        const colors = ["#87CEEB", "#FFD700", "#8A2BE2", "#1E90FF"];
-        let currentNumber = 1;
-        let timerInterval;
-        let elapsedTime = 0;
-        let totalCells;
-        let selectedGridSize;
-        let gameStarted = false; // Флаг, показывающий, началась ли игра
+        const correctPassword = "4589rmd";
 
-        // Выбор размера таблицы
-        function selectGridSize(size) {
-            selectedGridSize = size; // Запоминаем выбранный размер
-            document.getElementById("start-btn").style.display = "inline-block"; // Показываем кнопку "Начать"
-            generateGrid(size); // Генерируем таблицу
+        function checkPassword() {
+            const enteredPassword = document.getElementById("passwordInput").value;
+            if (enteredPassword === correctPassword) {
+                document.getElementById("passwordPrompt").style.display = "none";
+            } else {
+                alert("Неверный пароль! Попробуйте снова.");
+            }
         }
 
-        // Функция запуска игры
-        function startGame() {
-            gameStarted = true; // Игра началась
-            document.getElementById("start-btn").style.display = "none"; // Скрываем кнопку "Начать"
-            document.getElementById("result").textContent = ""; // Скрытие результата
-            startTimer(); // Запуск таймера
-        }
-
-        // Функция для старта таймера
-        function startTimer() {
-            timerInterval = setInterval(() => {
-                elapsedTime++;
-                const minutes = String(Math.floor(elapsedTime / 60)).padStart(2, '0');
-                const seconds = String(elapsedTime % 60).padStart(2, '0');
-                document.getElementById("timer").textContent = `${minutes}:${seconds}`;
-            }, 1000);
-        }
-
-        // Функция для завершения игры
-        function endGame() {
-            clearInterval(timerInterval); // Останавливаем таймер
-            const minutes = String(Math.floor(elapsedTime / 60)).padStart(2, '0');
-            const seconds = String(elapsedTime % 60).padStart(2, '0');
-            document.getElementById("result").textContent = `Игра завершена! Время: ${minutes}:${seconds}`;
-        }
-
-        // Генерация сетки
-        function generateGrid(size) {
-            currentNumber = 1; // Сброс счётчика на 1
-            elapsedTime = 0; // Сброс времени
-            clearInterval(timerInterval); // Сброс таймера
-            document.getElementById("timer").textContent = "00:00"; // Обновление таймера
-
-            const grid = document.getElementById("grid");
-            grid.innerHTML = "";
-            grid.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
-            grid.style.gridTemplateRows = `repeat(${size}, 1fr)`;
-
-            const numbers = Array.from({ length: size * size }, (_, i) => i + 1).sort(() => Math.random() - 0.5);
-            const cells = [];
-            totalCells = size * size;
-
-            numbers.forEach((number, index) => {
-                const cell = document.createElement("div");
-                cell.classList.add("cell");
-                cell.textContent = number;
-                cell.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                cell.addEventListener("click", () => {
-                    // Проверка на правильность последовательности
-                    if (gameStarted && parseInt(cell.textContent) === currentNumber) {
-                        // Вибрация на мобильных устройствах
-                        if (navigator.vibrate) {
-                            navigator.vibrate(200); // Вибрация на 200 миллисекунд
-                        }
-
-                        currentNumber++;
-                        if (currentNumber > totalCells) {
-                            endGame();
-                        }
-                    }
-                });
-                grid.appendChild(cell);
-                cells.push(cell);
-            });
-
-            if (size === 4 || size === 6 || size === 8) {
-                const centerIndex = Math.floor(size * size / 2); // Находим центральную ячейку
-                const centerCell = cells[centerIndex];
-                const dot = document.createElement("div");
-                dot.classList.add("center-dot");
-                centerCell.appendChild(dot);
+        // Функция для обработки нажатия клавиши
+        function handleKeyPress(event) {
+            if (event.key === "Enter") {
+                checkPassword(); // Запускаем проверку пароля при нажатии клавиши Enter
             }
         }
     </script>
